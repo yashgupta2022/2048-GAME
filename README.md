@@ -9,6 +9,7 @@ Each Move generates a number-2 tile at a random empty position
 * RESET button => Reset the Game if you want to Retry
 * EXIT button => To Exit the Window
 * SCORE => Displays your current score
+* MAX => Displays your Highest Score of All Time (even when you reset or restart the game)
 
 After a Win or Lose:-
 * Click Ok to RESET
