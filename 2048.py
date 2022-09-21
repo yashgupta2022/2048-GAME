@@ -5,6 +5,7 @@
 import random
 score = 0
 
+
 def start_game():
     return [[0 for i in range (4)]for j in range(4)]
 
@@ -172,12 +173,29 @@ class Game2048(Frame):
         exit_btn = Button(background, text="EXIT",fg="black",bg=Cell_BGC[2],font = ("Verdana", 15, "bold"),
                 justify=CENTER, width=10, height=2, command=self.close)
         exit_btn.grid(row=0,column=1,padx=10,pady=10)
-
+        
         #SCORE DISPLAY
         global label1
         label1 = Label(background, text="SCORE : "+str(score),fg="red",bg=Cell_BGC[2],font = ("Verdana", 15, "bold"),
                 justify=CENTER, width=15, height=2)
-        label1.grid(row=0,column=3,padx=10,pady=10)
+        label1.grid(row=0,column=2,padx=10,pady=10)
+
+        #HIGH SCORE DISPLAY
+        global label2
+        h="0"
+        try:
+            f=open("highscore.txt",'r')
+            h = f.read()
+            f.close()
+        except FileNotFoundError:
+            f=open("highscore.txt",'w')
+            f.write(h)
+            f.close()
+        
+        label2 = Label(background, text="MAX : "+h,fg="red",bg=Cell_BGC[2],font = ("Verdana", 15, "bold"),
+                justify=CENTER, width=14, height=2)
+        label2.grid(row=0,column=3,padx=10,pady=10)
+        
 
         
         for i in range(1,5):
@@ -201,7 +219,20 @@ class Game2048(Frame):
         add_random_tile(self.matrix)
 
     def update_grid_cells(self):
+        global highscore
+        
+        f=open("highscore.txt","r")
+        highscore = int(f.read())
+        f.close()
         label1.config(text="SCORE : "+str(score))
+        if score>=highscore:
+            f=open("highscore.txt","w")
+            highscore = score
+            f.write(str(highscore))
+            label2.config(text="MAX : "+ str(highscore))
+            f.close()
+
+
         for i in range(4):
             for j in range(4):
                 new = self.matrix[i][j]
@@ -215,6 +246,8 @@ class Game2048(Frame):
         self.update_idletasks()
 
     def reset(self):
+        global score
+        score=0
         self.init_matrix()
         self.update_grid_cells()
 
